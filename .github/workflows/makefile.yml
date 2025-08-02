@@ -19,3 +19,6 @@ jobs:
 
     - name: Build and run test
       run: make PROJECT_DIR=./
+
+    - name: Run tests
+      run: ./test_runner
