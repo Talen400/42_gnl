@@ -17,8 +17,8 @@ jobs:
     - name: Clone test repo
       run: git clone https://github.com/Talen400/42_gnl_tester.git
 
-    - name: Build and run test
-      run: make PROJECT_DIR=./
+    - name: Build
+      run: make PROJECT_DIR=.
 
     - name: Run tests
       run: ./test_runner
