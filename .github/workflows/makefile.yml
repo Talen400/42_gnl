@@ -1,0 +1,21 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Clone test repo
+      run: git clone https://github.com/Talen400/42_gnl_tester.git
+
+    - name: Build and run test
+      run: make PROJECT_DIR=./
