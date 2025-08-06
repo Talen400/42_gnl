@@ -1,6 +1,8 @@
 NAME = get_next_line
 CC = cc
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra #-D BUFFER_SIZE=10
+
+# Remove wildcard then finish all .c
 
 SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
@@ -13,7 +15,7 @@ $(NAME): $(OBJ)
 .o: .c
 	$(CC) $(FLAGS) -c $< -o $@
 
-clear:
+clean:
 	rm -f $(OBJ)
 
 fclean: clean
@@ -21,4 +23,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clear fclear re
+.PHONY: all clean fclean re
