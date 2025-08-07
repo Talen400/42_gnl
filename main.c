@@ -15,7 +15,7 @@ static char	* test_print_text()
     fd = open("test.txt", O_RDONLY);
     if (fd < 0)
     {
-        printf("Erro ao abrir test.txt\n");
+        printf("Erro ao abrir test.txt");
         return (0);
     }
 
