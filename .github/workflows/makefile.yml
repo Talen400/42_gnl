@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: | 
           cd tester
-          make PROJECT_DIR=../
+          make SRC=../
           
     - name: Run tests
       run: ./test_runner
