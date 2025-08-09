@@ -26,4 +26,6 @@ jobs:
           make PROJECT_DIR=../
           
     - name: Run tests
-      run: ./test_runner
+      run: |
+        cd tester
+        ./test_runner
