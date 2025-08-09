@@ -18,7 +18,7 @@ jobs:
       run: rm Makefile
       
     - name: Clone test repo
-      run: git clone https://github.com/Talen400/42_gnl_tester.git tester
+      run: git clone https://github.com/Talen400/42_gnl_tester.git testers
 
     - name: Build
       run: | 
