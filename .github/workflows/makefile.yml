@@ -18,10 +18,12 @@ jobs:
       run: rm Makefile
       
     - name: Clone test repo
-      run: git clone https://github.com/Talen400/42_gnl_tester.git
+      run: git clone https://github.com/Talen400/42_gnl_tester.git tester
 
     - name: Build
-      run: make PROJECT_DIR=.
-
+      run: | 
+          cd tester
+          make PROJECT_DIR=../
+          
     - name: Run tests
       run: ./test_runner
