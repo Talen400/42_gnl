@@ -6,7 +6,7 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:11:36 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/07 17:26:05 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:03:53 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		str[i] = s2[i - len_s1];
 		i++;
 	}
-	str[i] = '\0';
+	str[i - 1] = '\0';
 	return (str);
 }
 

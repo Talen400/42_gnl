@@ -3,9 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int	tests_run = 0;
-
-static char	* test_print_text()
+int	main(void)
 {
 	int fd;
     char *line;
@@ -22,38 +20,8 @@ static char	* test_print_text()
     printf("=== Testando arquivo normal ===\n");
     while ((line = get_next_line(fd)) != NULL)
     {
-        printf("Linha %d: %s\n", line_count++, line);
+        printf("Linha %d: %s", line_count++, line);
         free(line);
     }
     close(fd);
-	return (0);
-}
-
-static char	* test_hello_world()
-{
-	printf("Helloooo :3\n");
-	return (0);
-}
-
-static char * all_tests()
-{
-	mu_run(test_hello_world);
-	mu_run(test_print_text);
-	return (0);
-}
-
-int	main(void)
-{
-	char	*result = all_tests();
-
-	if (result != 0)
-	{
-		printf("%s\n", result);
-	}
-	else
-	{
-		printf("All tests aproved\n");
-	}
-	printf("Tests run: %d\n", tests_run);
-	return (result != 0);
 }

@@ -4,7 +4,7 @@ FLAGS = -Wall -Werror -Wextra #-D BUFFER_SIZE=10
 
 # Remove wildcard then finish all .c
 
-SRC = $(wildcard *.c)
+SRC = get_next_line.c get_next_line_utils.c main.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
@@ -12,7 +12,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $^ -o $@
 
-.o: .c
+%.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
