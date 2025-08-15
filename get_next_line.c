@@ -6,7 +6,7 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 10:42:44 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 11:05:56 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,17 @@ static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)
 		tmp = str;
 		str = ft_strjoin(tmp, buffer);
 		free(tmp);
-		*nbyte = read(fd, buffer, BUFFER_SIZE);
+		*nbyte = read(fd, buffer, ft_strlen(buffer));
+		if (*nbyte <= 0)
+			break ;
 		buffer[*nbyte] = '\0';
 	}
 	ptr = ft_substr(buffer, 0, ft_indexnewline(buffer) + 1);
 	tmp = str;
 	str = ft_strjoin(tmp, ptr);
-	*rest = ft_substr(buffer, ft_indexnewline(buffer) + 1, *nbyte);
+	free(tmp);
+	tmp = *rest;
+	*rest = ft_strdup((buffer + ft_indexnewline(buffer) + 1));
 	free(tmp);
 	free(ptr);
 	return (str);
