@@ -6,10 +6,9 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 11:05:56 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 12:31:09 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "get_next_line.h"
 
 static int	ft_indexnewline(char *str)
@@ -17,9 +16,13 @@ static int	ft_indexnewline(char *str)
 	int	n;
 
 	n = 0;
+	if (!str)
+		return (-1);
 	while (str[n] && str[n] != '\n')
 		n++;
-	return (n);
+	if (str[n] == '\n')
+		return (n);
+	return (-1);
 }
 
 static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)

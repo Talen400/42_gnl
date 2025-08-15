@@ -6,7 +6,7 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:11:36 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/12 19:03:53 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 11:25:19 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
-	while (*s)
-	{
+	while (s[len])
 		len++;
-		s++;
-	}
 	return (len);
 }
 
@@ -57,7 +54,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	len_s2 = ft_strlen(s2);
 	len = len_s1 + len_s2 + 1;
 	str = malloc (len * sizeof(char));
-	if (str == NULL)
+	if (!str)
 		return (NULL);
 	i = 0;
 	while (i < len_s1)
@@ -70,7 +67,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		str[i] = s2[i - len_s1];
 		i++;
 	}
-	str[i - 1] = '\0';
+	str[--i] = '\0';
 	return (str);
 }
 
