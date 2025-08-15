@@ -6,13 +6,13 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 09:52:27 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 10:42:44 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_indexNewLine(char *str)
+static int	ft_indexnewline(char *str)
 {
 	int	n;
 
@@ -22,27 +22,14 @@ static int	ft_indexNewLine(char *str)
 	return (n);
 }
 
-static int	ft_rest(char **rest, char **str)
-{
-	char	*tmp;
-
-	if (!(*rest) || *(*rest) == '\0')
-		return (0);
-	*str = ft_substr(*rest, 0, ft_indexNewLine(*rest) + 1);
-	tmp = *rest;
-	*rest = ft_substr(tmp, ft_indexNewLine(*rest) + 1, ft_strlen(tmp));
-	free(tmp);
-	return (1);
-}
-
 static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)
 {
 	char		*str;
 	char		*tmp;
 	char		*ptr;
-	
+
 	str = ft_strdup("");
-	while (*nbyte >= 0 && !ft_strchr(buffer, '\n'))
+	while (*nbyte > 0 && !ft_strchr(buffer, '\n'))
 	{
 		tmp = str;
 		str = ft_strjoin(tmp, buffer);
@@ -50,12 +37,10 @@ static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)
 		*nbyte = read(fd, buffer, BUFFER_SIZE);
 		buffer[*nbyte] = '\0';
 	}
-	ptr = ft_substr(buffer, 0, ft_indexNewLine(buffer) + 1);
+	ptr = ft_substr(buffer, 0, ft_indexnewline(buffer) + 1);
 	tmp = str;
 	str = ft_strjoin(tmp, ptr);
-	free(tmp);
-	tmp = buffer;
-	*rest = ft_substr(tmp, ft_indexNewLine(buffer) + 1, *nbyte);
+	*rest = ft_substr(buffer, ft_indexnewline(buffer) + 1, *nbyte);
 	free(tmp);
 	free(ptr);
 	return (str);
@@ -68,9 +53,10 @@ static char	*ft_buffering(int fd)
 	char		*buffer;
 	char		*str;
 
-	str = NULL;
-	if (ft_rest(&rest, &str))
+	if (!(rest == NULL || *rest == '\0'))
 	{
+		nbyte = ft_strlen(rest);
+		str = ft_str(fd, rest, &nbyte, &rest);
 		return (str);
 	}
 	buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char ));
@@ -81,10 +67,12 @@ static char	*ft_buffering(int fd)
 	{
 		free(buffer);
 		free(rest);
+		rest = NULL;
 		return (NULL);
 	}
 	buffer[nbyte] = '\0';
 	str = ft_str(fd, buffer, &nbyte, &rest);
+	free(buffer);
 	return (str);
 }
 
