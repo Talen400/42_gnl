@@ -1,6 +1,6 @@
 NAME = get_next_line
 CC = cc
-FLAGS = -Wall -Werror -Wextra #-D BUFFER_SIZE=10
+FLAGS = -g -Wall -Werror -Wextra #-D BUFFER_SIZE=10
 
 # Remove wildcard then finish all .c
 

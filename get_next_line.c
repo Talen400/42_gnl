@@ -6,101 +6,94 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/12 18:54:57 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 09:52:27 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_indexNewLine(char *buffer)
+static int	ft_indexNewLine(char *str)
 {
 	int	n;
 
 	n = 0;
-	while (buffer[n] && buffer[n] != '\n')
+	while (str[n] && str[n] != '\n')
 		n++;
 	return (n);
 }
 
-static char	*ft_rest(char ****rest)
+static int	ft_rest(char **rest, char **str)
 {
-	char	*str;
-	char	*temp;
-	int		len;
+	char	*tmp;
 
-	if (!(***rest))
-		return (ft_strdup(""));
-	str = ft_substr(***rest, 0, ft_indexNewLine(***rest) + 1);
-	temp = ***rest;
-	len = ft_strlen(temp);
-	***rest = ft_substr(temp, ft_indexNewLine(***rest) + 1, len);
-	free(temp);
+	if (!(*rest) || *(*rest) == '\0')
+		return (0);
+	*str = ft_substr(*rest, 0, ft_indexNewLine(*rest) + 1);
+	tmp = *rest;
+	*rest = ft_substr(tmp, ft_indexNewLine(*rest) + 1, ft_strlen(tmp));
+	free(tmp);
+	return (1);
+}
+
+static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)
+{
+	char		*str;
+	char		*tmp;
+	char		*ptr;
+	
+	str = ft_strdup("");
+	while (*nbyte >= 0 && !ft_strchr(buffer, '\n'))
+	{
+		tmp = str;
+		str = ft_strjoin(tmp, buffer);
+		free(tmp);
+		*nbyte = read(fd, buffer, BUFFER_SIZE);
+		buffer[*nbyte] = '\0';
+	}
+	ptr = ft_substr(buffer, 0, ft_indexNewLine(buffer) + 1);
+	tmp = str;
+	str = ft_strjoin(tmp, ptr);
+	free(tmp);
+	tmp = buffer;
+	*rest = ft_substr(tmp, ft_indexNewLine(buffer) + 1, *nbyte);
+	free(tmp);
+	free(ptr);
 	return (str);
 }
 
-static char	*ft_strrest(int fd, char **buffer, int *nbyte, char ***rest)
+static char	*ft_buffering(int fd)
 {
-	char	*str;
-	char	*temp;
-	char	*ptr;
+	static char	*rest;
+	ssize_t		nbyte;
+	char		*buffer;
+	char		*str;
 
-	str = ft_rest(&rest);
-	if (!ft_strchr(str, '\n'))
+	str = NULL;
+	if (ft_rest(&rest, &str))
 	{
-	while (*nbyte >= 0 && !ft_strchr(*buffer, '\n'))
-		{
-			temp = str;
-			str = ft_strjoin(temp, *buffer);
-			free(temp);
-			*nbyte = read(fd, *buffer, BUFFER_SIZE);
-			(*buffer)[*nbyte] = '\0';
-		}
-		ptr = ft_substr(*buffer, 0, ft_indexNewLine(*buffer) + 1);
-		temp = str;
-		str = ft_strjoin(temp, ptr);
-		free(**rest);
-		**rest = ft_substr(*buffer, ft_indexNewLine(*buffer) + 1, *nbyte);
-		free(temp);
-		free(ptr);
+		return (str);
 	}
-	else
-	{
-		temp = **rest;
-		**rest = ft_strjoin(temp, *buffer);
-		free(temp);
-	}
-	return (str);
-}
-
-static char	*ft_buffering(int fd, char **rest)
-{
-	int		nbyte;
-	char	*buffer;
-	char	*str;
-
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char ));
+	buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char ));
 	if (!buffer)
 		return (NULL);
 	nbyte = read(fd, buffer, BUFFER_SIZE);
 	if (nbyte <= 0)
 	{
 		free(buffer);
-		free(*rest);
+		free(rest);
 		return (NULL);
 	}
 	buffer[nbyte] = '\0';
-	str = ft_strrest(fd, &buffer, &nbyte, &rest);
-	free(buffer);
+	str = ft_str(fd, buffer, &nbyte, &rest);
 	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
-	char		*str;
+	char	*str;
 
-	if (fd < -1 || BUFFER_SIZE <= 0)
+	if (fd <= 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str = ft_buffering(fd, &rest);
+	str = ft_buffering(fd);
 	return (str);
 }
