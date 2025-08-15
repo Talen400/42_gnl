@@ -6,14 +6,15 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 12:31:09 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:48:49 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 
-static int	ft_indexnewline(char *str)
+static ssize_t	ft_indexln(char *str)
 {
-	int	n;
+	ssize_t	n;
 
 	n = 0;
 	if (!str)
@@ -25,70 +26,52 @@ static int	ft_indexnewline(char *str)
 	return (-1);
 }
 
-static char	*ft_str(int fd, char *buffer, ssize_t *nbyte, char **rest)
+static char	*ft_buffering(int fd, char **buffer)
 {
-	char		*str;
-	char		*tmp;
-	char		*ptr;
-
-	str = ft_strdup("");
-	while (*nbyte > 0 && !ft_strchr(buffer, '\n'))
-	{
-		tmp = str;
-		str = ft_strjoin(tmp, buffer);
-		free(tmp);
-		*nbyte = read(fd, buffer, ft_strlen(buffer));
-		if (*nbyte <= 0)
-			break ;
-		buffer[*nbyte] = '\0';
-	}
-	ptr = ft_substr(buffer, 0, ft_indexnewline(buffer) + 1);
-	tmp = str;
-	str = ft_strjoin(tmp, ptr);
-	free(tmp);
-	tmp = *rest;
-	*rest = ft_strdup((buffer + ft_indexnewline(buffer) + 1));
-	free(tmp);
-	free(ptr);
-	return (str);
-}
-
-static char	*ft_buffering(int fd)
-{
-	static char	*rest;
 	ssize_t		nbyte;
-	char		*buffer;
-	char		*str;
 
-	if (!(rest == NULL || *rest == '\0'))
-	{
-		nbyte = ft_strlen(rest);
-		str = ft_str(fd, rest, &nbyte, &rest);
-		return (str);
-	}
-	buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char ));
-	if (!buffer)
+	*buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char ));
+	if (!(*buffer))
 		return (NULL);
-	nbyte = read(fd, buffer, BUFFER_SIZE);
+	nbyte = read(fd, *buffer, BUFFER_SIZE);
 	if (nbyte <= 0)
 	{
-		free(buffer);
-		free(rest);
-		rest = NULL;
+		free(*buffer);
 		return (NULL);
 	}
-	buffer[nbyte] = '\0';
-	str = ft_str(fd, buffer, &nbyte, &rest);
-	free(buffer);
-	return (str);
+	(*buffer)[nbyte] = '\0';
+	return (*buffer);
+}
+
+static char	*ft_rest(char **rest)
+{
+	return (NULL);
+}
+
+static char *ft_str(int fd)
+{
+	static char	*rest;
+	char		*line;
+
+	if (rest)
+	{
+		line = ft_rest(&rest);
+		return (line);
+	}
+	line = NULL;
+	while (!line)
+	{
+		if ()
+	}
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*str;
+	char	*line;
 
 	if (fd <= 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str = ft_buffering(fd);
-	return (str);
+	line = ft_str(fd);
+	return (line);
 }
