@@ -12,66 +12,72 @@
 
 #include "get_next_line.h"
 
-static ssize_t	ft_indexln(char *str)
-{
-	ssize_t	n;
-
-	n = 0;
-	if (!str)
-		return (-1);
-	while (str[n] && str[n] != '\n')
-		n++;
-	if (str[n] == '\n')
-		return (n);
-	return (-1);
-}
-
-static char	*ft_buffering(int fd, char **buffer)
+static char	*ft_buffering(int fd, char *rest)
 {
 	ssize_t		nbyte;
+	char		*tmp;
+	char		*buffer;
 
-	*buffer = malloc ((BUFFER_SIZE + 1) * sizeof(char ));
-	if (!(*buffer))
+	buffer = malloc (BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
-	nbyte = read(fd, *buffer, BUFFER_SIZE);
-	if (nbyte <= 0)
+	nbyte = 1;
+	while (nbyte > 0)
 	{
-		free(*buffer);
-		return (NULL);
+		nbyte = read(fd, buffer, BUFFER_SIZE);
+		if (nbyte < 0)
+		{
+			free(buffer);
+			free(rest);
+			return (NULL);
+		}
+		buffer[nbyte] = '\0';
+		tmp = rest;
+		rest = ft_strjoin(tmp, buffer);
+		free(tmp);
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
-	(*buffer)[nbyte] = '\0';
-	return (*buffer);
+	free(buffer);
+	return (rest);
 }
 
 static char	*ft_rest(char **rest)
 {
-	return (NULL);
-}
+	char	*line;
+	char	*tmp;
+	char	*nl;
 
-static char *ft_str(int fd)
-{
-	static char	*rest;
-	char		*line;
-
-	if (rest)
+	if (!*rest || !**rest)
+		return (NULL);
+	nl = ft_strchr(*rest, '\n');
+	if (nl)
 	{
-		line = ft_rest(&rest);
-		return (line);
+		line = ft_substr(*rest, 0, nl - *rest + 1);
+		tmp = ft_strdup(nl + 1);
+		free(*rest);
+		*rest = tmp;
 	}
-	line = NULL;
-	while (!line)
+	else
 	{
-		if ()
+		line = ft_strdup(*rest);
+		free(*rest);
+		*rest = NULL;
 	}
 	return (line);
 }
 
+
 char	*get_next_line(int fd)
 {
-	char	*line;
+	static char	*rest;
+	char		*line;
 
-	if (fd <= 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = ft_str(fd);
+	rest = ft_buffering(fd, rest);
+	if (!rest || !*rest)
+		return (NULL);
+	line = ft_rest(&rest);
 	return (line);
 }
