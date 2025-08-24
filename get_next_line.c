@@ -28,7 +28,6 @@ static char	*ft_buffering(int fd, char *rest)
 		if (nbyte < 0)
 		{
 			free(buffer);
-			free(rest);
 			return (NULL);
 		}
 		buffer[nbyte] = '\0';
@@ -66,7 +65,6 @@ static char	*ft_rest(char **rest)
 	}
 	return (line);
 }
-
 
 char	*get_next_line(int fd)
 {
