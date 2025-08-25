@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -19,6 +19,13 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+typedef struct s_fd_list
+{
+	int					fd;
+	char				*rest;
+	struct s_fd_list	*next;
+}					t_fd_list;
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
