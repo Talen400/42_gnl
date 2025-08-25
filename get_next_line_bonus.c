@@ -14,8 +14,9 @@
 
 static t_fd_list	*ft_get(t_fd_list **head, int fd)
 {
-	t_fd_list	*node = *head;
+	t_fd_list	*node;
 
+	node = *head;
 	while (node)
 	{
 		if (node->fd == fd)
@@ -34,9 +35,11 @@ static t_fd_list	*ft_get(t_fd_list **head, int fd)
 
 static void	ft_remove(t_fd_list **head, int fd)
 {
-	t_fd_list	*previous = NULL;
-	t_fd_list	*node = *head;
+	t_fd_list	*previous;
+	t_fd_list	*node;
 
+	previous = NULL;
+	node = *head;
 	while (node)
 	{
 		if (node->fd == fd)
