@@ -20,6 +20,11 @@ jobs:
     - name: Clone test repo
       run: git clone https://github.com/Talen400/42_gnl_tester.git tester
 
+    - name: Copy test files to root
+      run: |
+          cd tester
+          cp tests/*.txt ./
+          
     - name: Build
       run: | 
           cd tester
