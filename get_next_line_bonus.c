@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 18:48:49 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:07:25 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ static void	ft_remove(t_fd_list **head, int fd)
 	}
 }
 
-static char	*ft_buffering(int fd, char *rest)
+static char	*ft_buffering(int fd, char *rest, char *tmp)
 {
 	ssize_t		nbyte;
-	char		*tmp;
 	char		*buffer;
 
 	buffer = malloc(BUFFER_SIZE + 1);
@@ -73,6 +72,7 @@ static char	*ft_buffering(int fd, char *rest)
 		if (nbyte < 0)
 		{
 			free(buffer);
+			free(rest);
 			return (NULL);
 		}
 		buffer[nbyte] = '\0';
@@ -116,13 +116,15 @@ char	*get_next_line(int fd)
 	static t_fd_list	*fd_list;
 	t_fd_list			*fd_node;
 	char				*line;
+	char				*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	fd_node = ft_get(&fd_list, fd);
 	if (!fd_node)
 		return (NULL);
-	fd_node->rest = ft_buffering(fd, fd_node->rest);
+	tmp = "";
+	fd_node->rest = ft_buffering(fd, fd_node->rest, tmp);
 	if (!fd_node->rest || !*fd_node->rest)
 	{
 		ft_remove(&fd_list, fd);

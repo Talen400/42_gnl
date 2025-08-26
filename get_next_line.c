@@ -6,16 +6,15 @@
 /*   By: tlavared <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 17:31:12 by tlavared          #+#    #+#             */
-/*   Updated: 2025/08/15 18:48:49 by tlavared         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:04:47 by tlavared         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_buffering(int fd, char *rest)
+static char	*ft_buffering(int fd, char *rest, char *tmp)
 {
 	ssize_t		nbyte;
-	char		*tmp;
 	char		*buffer;
 
 	buffer = malloc (BUFFER_SIZE + 1);
@@ -28,6 +27,7 @@ static char	*ft_buffering(int fd, char *rest)
 		if (nbyte < 0)
 		{
 			free(buffer);
+			free(rest);
 			return (NULL);
 		}
 		buffer[nbyte] = '\0';
@@ -70,12 +70,18 @@ char	*get_next_line(int fd)
 {
 	static char	*rest;
 	char		*line;
+	char		*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	rest = ft_buffering(fd, rest);
+	tmp = "";
+	rest = ft_buffering(fd, rest, tmp);
 	if (!rest || !*rest)
-		return (NULL);
+	{
+		free(rest);
+		rest = NULL;
+		return (rest);
+	}
 	line = ft_rest(&rest);
 	return (line);
 }
