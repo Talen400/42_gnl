@@ -13,9 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Ajusting project
-      run: rm Makefile
       
     - name: Clone test repo
       run: git clone https://github.com/Talen400/42_gnl_tester.git tester
