@@ -17,18 +17,7 @@ jobs:
     - name: Clone test repo
       run: git clone https://github.com/Talen400/42_gnl_tester.git
 
-    - name: Copy files to root
-      run: |
-          cp get_next_line.c get_next_line_utils.c get_next_line.h 42_gnl_tester/
-          if [ -f "get_next_line_bonus.c" ]; then
-            cp get_next_line_bonus.c get_next_line_utils_bonus.c get_next_line_bonus.h tester/
-          fi
-          
-    - name: Build
-      run: | 
-          make -C 42_gnl_tester PROJECT_DIR=.
-          
     - name: Run tests
       run: |
-        cd 42_gnl_tester
+        make -C 42_gnl_tester
         ./test_runner
