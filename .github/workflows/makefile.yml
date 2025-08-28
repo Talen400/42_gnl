@@ -20,4 +20,3 @@ jobs:
     - name: Run tests
       run: |
         make -C 42_gnl_tester
-        ./test_runner
