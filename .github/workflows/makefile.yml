@@ -19,5 +19,4 @@ jobs:
 
     - name: Run tests
       run: |
-        cd 42_gnl_tester
-        make
+        make -C 42_gnl_tester
